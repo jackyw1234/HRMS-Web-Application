@@ -14,13 +14,13 @@ DROP TABLE IF EXISTS staff_schedule;
 
 CREATE table Department (
 	Dept_id INT NOT NULL auto_increment,
-	name VARCHAR(50),
+	Department_name VARCHAR(50),
     	PRIMARY KEY (Dept_id)
 );
 
 CREATE table Role (
 	Role_id INT NOT NULL auto_increment,
-	name VARCHAR(50),
+	Role_name VARCHAR(50),
     	PRIMARY KEY (Role_id)
 );
 
@@ -28,7 +28,7 @@ CREATE table Staff (
 	Staff_id INT NOT NULL auto_increment,
 	Dept_id INT NOT NULL,
 	Role_id INT NOT NULL,
-	name VARCHAR(50) NOT NULL,
+	Staff_name VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
 	address VARCHAR(50) NOT NULL,
 	username VARCHAR(50) NOT NULL,
