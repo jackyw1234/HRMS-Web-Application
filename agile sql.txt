@@ -1,0 +1,131 @@
+DROP TABLE IF EXISTS Department;
+DROP TABLE IF EXISTS Role;
+DROP TABLE IF EXISTS Staff;
+DROP TABLE IF EXISTS Claim_Type;
+DROP TABLE IF EXISTS Claim;
+DROP TABLE IF EXISTS Punch_Card;
+DROP TABLE IF EXISTS Feedback;
+DROP TABLE IF EXISTS Leave_Reason;
+DROP TABLE IF EXISTS Leave_;
+DROP TABLE IF EXISTS MC;
+DROP TABLE IF EXISTS Shift;
+DROP TABLE IF EXISTS Schedule;
+DROP TABLE IF EXISTS staff_schedule;
+
+CREATE table Department (
+	Dept_id INT NOT NULL auto_increment,
+	name VARCHAR(50),
+    	PRIMARY KEY (Dept_id)
+);
+
+CREATE table Role (
+	Role_id INT NOT NULL auto_increment,
+	name VARCHAR(50),
+    	PRIMARY KEY (Role_id)
+);
+
+CREATE table Staff (
+	Staff_id INT NOT NULL auto_increment,
+	Dept_id INT NOT NULL,
+	Role_id INT NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	address VARCHAR(50) NOT NULL,
+	username VARCHAR(50) NOT NULL,
+	password VARCHAR(50) NOT NULL,
+	PRIMARY KEY (Staff_id),
+	FOREIGN KEY (Dept_id) REFERENCES Department(Dept_id),
+	FOREIGN KEY (Role_id) REFERENCES Role(Role_id)
+);
+
+CREATE table Claim_Type (
+	CT_id INT NOT NULL auto_increment,
+    	type VARCHAR(50),
+	PRIMARY KEY (CT_id)
+);
+
+CREATE table Claim (
+	Claim_id INT NOT NULL auto_increment,
+	CT_id INT NOT NULL,
+	Staff_id INT NOT NULL,
+    	date_submitted DATETIME,
+    	claim_amount DOUBLE,
+    	date_of_claim DATETIME,
+    	status VARCHAR(50),
+	PRIMARY KEY (Claim_id),
+	FOREIGN KEY (CT_id) REFERENCES Claim_Type(CT_id),
+    	FOREIGN KEY (Staff_id) REFERENCES Staff(Staff_id)
+);
+
+CREATE table Punch_Card (
+	PC_id INT NOT NULL auto_increment,
+    	Staff_id INT NOT NULL,
+    	date DATETIME,
+    	clock_in_time DATETIME,
+   	clock_out_time DATETIME,
+   	break_hours DOUBLE,
+	PRIMARY KEY (PC_id),
+	FOREIGN KEY (Staff_id) REFERENCES Staff(Staff_id)
+);
+
+CREATE table Feedback (
+	Feedback_id INT NOT NULL auto_increment,
+    	name VARCHAR(50),
+    	email VARCHAR(50),
+    	feedback VARCHAR(250),
+	PRIMARY KEY (Feedback_id)
+);
+
+CREATE table Leave_Reason (
+	LR_id INT NOT NULL auto_increment,
+   	reason VARCHAR(50),
+	PRIMARY KEY (LR_id)
+);
+
+CREATE table Leave_ (
+	Leave_id INT NOT NULL auto_increment,
+   	Staff_id INT NOT NULL,
+   	LR_id INT NOT NULL,
+	date_requested DATETIME,
+    	start_date DATETIME,
+   	end_date DATETIME,
+   	status VARCHAR(50),
+	PRIMARY KEY (Leave_id),
+   	FOREIGN KEY (Staff_id) REFERENCES Staff(Staff_id),
+   	FOREIGN KEY (LR_id) REFERENCES Leave_Reason(LR_id)
+);
+
+CREATE table MC (
+	MC_id INT NOT NULL auto_increment,
+    	Staff_id INT NOT NULL,
+    	MC_type VARCHAR(50),
+    	date_submitted DATETIME,
+    	start_date DATETIME,
+    	end_date DATETIME,
+    	PRIMARY KEY (MC_id),
+    	FOREIGN KEY (Staff_id) REFERENCES Staff(Staff_id)
+);
+
+CREATE table Shift (
+	Shift_id INT NOT NULL auto_increment,
+    	timing VARCHAR(50),
+	PRIMARY KEY (Shift_id)
+);
+
+CREATE table Schedule (
+	Schedule_id INT NOT NULL auto_increment,
+    	Staff_id INT NOT NULL,
+    	Shift_id INT NOT NULL,
+    	date DATETIME,
+    	status VARCHAR(50),
+	PRIMARY KEY (Schedule_id),
+    	FOREIGN KEY (Staff_id) REFERENCES Staff(Staff_id),
+    	FOREIGN KEY (Shift_id) REFERENCES Shift(Shift_id)
+);
+
+CREATE table staff_schedule (
+	Staff_id INT NOT NULL,
+    	Schedule_id INT NOT NULL,
+    	FOREIGN KEY (Staff_id) REFERENCES Staff(Staff_id),
+    	FOREIGN KEY (Schedule_id) REFERENCES Schedule(Schedule_id)
+);
