@@ -11,7 +11,7 @@ const db = mysql.createConnection ({
   host: "localhost",
   user: "root",
   password: "Password",
-  database: "mySmartHome" });
+  database: "" });
  // connect to database
  db.connect((err) => {
   if (err) {
