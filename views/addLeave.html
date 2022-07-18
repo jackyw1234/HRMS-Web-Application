@@ -1,0 +1,50 @@
+ <!doctype html>
+ <html>
+ 
+ <head>
+   <title> Create a Leave Application </title>
+ </head>
+ 
+ <body>
+
+  <h1> Leave application </h1>
+ 
+  <form method="POST" action="/addLeave">
+    <label for="name">Name of Applicant: </label>
+    <input type="text" name="name" id="name"><br><br>
+
+    <label for="department"> Department: </label>
+    <select name="department" required>
+      <option value="" disabled selected>Select a Department</option>
+      <option value="Sales">Sales</option>
+      <option value="Marketing">Marketing</option>
+      <option value="Finance">Finance</option>
+      <option value="Operations">Operations</option>
+      <option value="Human Resource">Human Resource</option>
+      <option value="Purchase">Purchase</option>
+    </select><br><br>
+
+    <label for="requestdate">Date of Request: </label>
+    <input type="date" name="requestdate" id="requestdate"><br><br>
+    
+    <label>Reason for request: </label>
+    <input type="radio" id="requestreason" name="requestreason" value="On" required/>
+    <label for="Annual Leave">Annual Leave</label>
+    <input type="radio" id="requestreason" name="requestreason" value="Off"/>
+    <label for="Emergency Leave">Emergency Leave</label>
+    <input type="radio" id="requestreason" name="requestreason" value="Off"/>
+    <label for="Others">Others</label><br><br>
+
+    <label for="startdate">Start Date: </label>
+    <input type="date" name="startdate" id="startdate">
+    &nbsp;&nbsp;
+    <label for="enddate">End Date: </label>
+    <input type="date" name="enddate" id="enddate"><br><br>
+
+
+    <input type="submit" value="Submit" />
+    <input type="submit" value="Save as draft" />
+    
+  </form>
+ </body>
+</html>

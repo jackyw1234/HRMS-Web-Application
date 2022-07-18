@@ -20,4 +20,8 @@ module.exports = function(app) {
       }
     });
   });
+
+  app.get("/addLeave",function(req, res){
+    res.render("addLeave.html")
+  });
 }

@@ -5,13 +5,13 @@ const app = express();
 const mysql = require("mysql");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const port = 8089;
+const port = 8088;
 
 const db = mysql.createConnection ({
   host: "localhost",
   user: "root",
-  password: "Password",
-  database: "" });
+  password: "password2",
+  database: "agile" });
  // connect to database
  db.connect((err) => {
   if (err) {
