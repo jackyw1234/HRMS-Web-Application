@@ -1,33 +1,33 @@
- <!doctype html>
- <html>
+<!doctype html>
+<html>
  
- <head>
+<head>
 
-<script>
-  // calculates how many days are between "startdate" and "enddate"
-  function calcDays() {
-    var start = new Date(document.getElementById("startdate").value);
-    var end = new Date(document.getElementById("enddate").value);
+  <script>
+    // calculates how many days are between "startdate" and "enddate"
+    function calcDays() {
+      var start = new Date(document.getElementById("startdate").value);
+      var end = new Date(document.getElementById("enddate").value);
 
-    return parseInt((end - start) / (24 * 3600 * 1000));
-  }
+      return parseInt((end - start) / (24 * 3600 * 1000));
+    }
 
-  function numofdays() {
-    if (document.getElementById("enddate")) {
-      document.getElementById("numdays2").value = calcDays();
-    }  
-  }
-</script>
+    function numofdays() {
+      if (document.getElementById("enddate")) {
+        document.getElementById("numdays2").value = calcDays();
+      }  
+    }
+  </script>
 
-   <title> Create a Leave Application </title>
- </head>
+  <title> Create a Leave Application </title>
+</head>
  
  <body>
 
   <h1> Leave application </h1>
  
   <form method="POST" action="/addLeave">
-    <label for="name">Name of Applicant: </label>
+    <!-- <label for="name">Name of Applicant: </label>
     <input type="text" name="name" id="name"><br><br>
 
     <label for="department"> Department: </label>
@@ -39,17 +39,17 @@
       <option value="Operations">Operations</option>
       <option value="Human Resource">Human Resource</option>
       <option value="Purchase">Purchase</option>
-    </select><br><br>
+    </select><br><br> -->
 
     <label for="requestdate">Date of Request: </label>
     <input type="date" name="requestdate" id="requestdate"><br><br>
     
     <label>Reason for request: </label>
-    <input type="radio" id="requestreason" name="requestreason" value="On" required/>
+    <input type="radio" id="requestreason" name="requestreason" value="1" required/>
     <label for="Annual Leave">Annual Leave</label>
-    <input type="radio" id="requestreason" name="requestreason" value="Off"/>
+    <input type="radio" id="requestreason" name="requestreason" value="2"/>
     <label for="Emergency Leave">Emergency Leave</label>
-    <input type="radio" id="requestreason" name="requestreason" value="Off"/>
+    <input type="radio" id="requestreason" name="requestreason" value="3"/>
     <label for="Others">Others</label><br><br>
 
     <label for="startdate">Start Date: </label>
@@ -68,7 +68,7 @@
     <input type="submit" value="Save as draft" /><br><br>
     
     Available leaves to apply as of today: -
-
+    
   </form>
  </body>
 </html>
