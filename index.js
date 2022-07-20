@@ -3,16 +3,15 @@ const express = require ("express");
 const bodyParser = require ("body-parser");
 const app = express();
 const mysql = require("mysql");
-
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const port = 8088;
+const port = 8089;
 
 const db = mysql.createConnection ({
   host: "localhost",
   user: "root",
-  password: "password2",
-  database: "agile" });
+  password: "Password",
+  database: "" });
  // connect to database
  db.connect((err) => {
   if (err) {
