@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial;
+        }
+
+        form {
+            text-align: center;
+            border: black;
+            border-radius: 2px;
+        }
+
+        input, select {
+            margin: 4px 2px;
+        }
+
+            input[name=address] {
+                width: 350px;
+                border-radius: 4px;
+            }
+
+        select {
+            width: 20%;
+            text-align: center;
+        }
+    </style>
+    <title>Register</title>
+</head>
+<body>
+    <h1> Register </h1>
+    <div>
+        <form method="POST" action="/registered">
+            <label>Name: </label><input id="name" type="text" name="name" value="" placeholder="Full Name" required/>
+            <label>Email: </label><input id="email" type="email" name="email" value="" placeholder="Email Address" required/> </br>
+            <label>Address: </label><input id="address" type="text" name="address" value="" placeholder="Home Address" required/> </br>
+            <label>Department: </label>
+            <select id="dept" name="dept" required>
+                <option value="">Select a department</option>
+                <% availableDepartment.forEach(function(department){ %>
+                <option value=<%= department.Dept_id %>><%= department.Department_name%></option>
+                <% }) %>
+            </select>
+            <label>Role: </label>
+            <select id="role" name="role" required>
+                <option value="">Select a role</option>
+                <% availableRole.forEach(function(role){ %>
+                <option value=<%= role.Role_id %>><%= role.Role_name%></option>
+                <% }) %>
+            </select> </br>
+            <label>Username: </label><input id="username" type="text" name="username" value="" placeholder="Username" required/> </br>
+            <label>Password: </label><input id="password" type="password" name="password" value="" placeholder="Password" required/> </br>
+            <input type="submit" value="register" />
+        </form>
+    </div>
+</body>
+</html>

@@ -3,11 +3,18 @@ module.exports = function(app) {
     
     app.get("/",function(req, res) {
         //Use this if else statement to check if user is still logged in 
-        if (req.session.userid)
+        if (req.session.username)
+            res.render("index.html");
+        else
+            res.redirect("/login");
+    }); 
+
+    app.get("/login", function (req, res) {
+        if (req.session.username)
             res.render("index.html");
         else
             res.render("login.html");
-    }); 
+    });
 
     app.post('/login', (req, res) => {
         //Check if there is staff with same username and password in database
@@ -18,35 +25,32 @@ module.exports = function(app) {
                 console.log(err);
                 res.redirect("/");               
             }
-            else {
+            else
+            {
                 //Check if there is anything in result
                 if (result.length != 0) {
+                    //Create session
                     session = req.session;
-                    session.userid = req.body.E_id;
-                    res.render("index.html");
+                    //Add username and roleid 
+                    session.username = req.body.E_id;
+                    session.roleid = result[0].Role_id;
+                    res.redirect("/");
                 }
                 else {
-                    res.render("login.html"/*, {error: "Incorrect username or password"}*/);
+                    res.redirect("/login"/*, {error: "Incorrect username or password"}*/);
                 }
             }
         });
     })
-
-    app.get("/login",function(req, res) {
-        if (req.session.userid)
-            res.render("index.html");
-        else
-            res.render("login.html");
-    });
-
-    //Remove session when logging out
+    
     app.get('/logout', (req, res) => {
+        //Removes session when logging out
         req.session.destroy();
         res.redirect('/');
     });
 
     app.get("/homepage",function(req, res) {
-        if (req.session.userid)
+        if (req.session.username)
             res.render("homepage.html");
         else
             res.render("login.html");
@@ -54,7 +58,7 @@ module.exports = function(app) {
     });
 
     app.get("/allLeaves", function (req, res) {
-        if (req.session.userid) {
+        if (req.session.username) {
             let sqlquery = "SELECT Staff.Staff_name, Department.Department_name, Leave_Reason.reason, Leave_.date_requested, Leave_.start_date, Leave_.end_date, Leave_.status" +
                             " FROM Leave_" +
                             " JOIN Staff ON Leave_.Staff_id = Staff.Staff_id" +
@@ -70,14 +74,14 @@ module.exports = function(app) {
             });
         }
         else
-            res.render("login.html");
+            res.redirect("/login");
     });
 
     app.get("/addLeave",function(req, res) {
-        if (req.session.userid)
+        if (req.session.username)
             res.render("addLeave.html");
         else
-            res.render("login.html");
+            res.redirect("/login");
     });
 
     app.post("/addLeave", function (req, res) {
@@ -98,4 +102,44 @@ module.exports = function(app) {
             }
         });
     })
+
+    // GET Register page
+    app.get("/register", function (req, res) {
+        if (req.session.username) { 
+            //check if roles are admin
+            if (req.session.roleid == 1) {
+                console.log(req.session.roleid);
+                let sqldepartmentquery = "Select * from department";
+                let sqlrolequery = "Select * from role";
+                db.query(sqldepartmentquery, (err, departmentResult) => {
+                    if (err) res.redirect("/");
+                    else {
+                        db.query(sqlrolequery, (err, roleResult) => {
+                            if (err) res.redirect("/");
+                            else {
+                                res.render("register.html", { availableDepartment: departmentResult, availableRole: roleResult });
+                            }
+                        });
+                    }
+                });
+            }
+            else
+                res.redirect("/");
+        }
+        else
+            res.redirect("/login");
+    });
+
+    //POST Register page
+    app.post("/registered", function (req, res) {
+        // saving data in database
+        let sqlquery = "Insert into staff (Dept_id, Role_id, Staff_name, email, address, username, password) values (?,?,?,?,?,?,?)";
+        let newrecord = [req.body.dept, req.body.role, req.body.name, req.body.email, req.body.address, req.body.username, req.body.password];
+        db.query(sqlquery, newrecord, (err, result) => {
+            if (err) res.redirect("/");
+            else {
+                res.send("Record: " + req.body.dept + " " + req.body.role + " " + req.body.name + " " + req.body.email + " " + req.body.address + " " + req.body.username + " " + req.body.password);
+            }
+        });
+    });
 }
