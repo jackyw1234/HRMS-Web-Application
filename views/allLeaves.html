@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 
 <head>  
@@ -37,14 +37,67 @@
       color: white;
     }
 
-    h1 { 
-      text-align: center; 
+    h1 {
+        text-align: center;
+        display: inline-block;
+        margin-left: 42%;
     }
 
     body { 
       font-family: Arial; 
     }
-  
+
+    .sidepanel {
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+    .sidepanel a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+    .sidepanel a:hover {
+        color: #f1f1f1;
+    }
+    .sidepanel .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+    }
+    .sidepanel .logout {
+        background-color: mediumspringgreen;
+        color: black;
+        position: absolute;
+        bottom: 60px;
+        width: 210px; 
+    }
+    .openbtn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+    }
+    .openbtn:hover {
+        background-color: #444;
+    }
+    #main {
+        transition: margin-left .5s;
+        padding: 16px;
+    }
   </style>
 
   <title>All Leaves</title>
@@ -52,38 +105,62 @@
 
 <body>
 
-  <h1> All Leaves </h1>
+    <!--Side Panel div-->
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="/">Home</a>
+        <a href="/allleaves">Leave</a>
+        <% if (session.roleid == 1 ){%>
+        <a href="/register">Register</a>
+        <%}%>
+        <a href="/logout" id="logout" class="logout">Logout</a>
+    </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰</button>
+        <h1> All Leaves </h1>
 
-  <table id="t1"> 
-    <thead>
-      <tr>
-        <th></th>
-        <th>Name of Applicant</th>
-        <th>Department</th>
-        <th>Reason</th>
-        <th>Date of Request</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Status</th>
-      </tr>
-    </thead>
+        <table id="t1">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name of Applicant</th>
+                    <th>Department</th>
+                    <th>Reason</th>
+                    <th>Date of Request</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
 
-    <tbody>
-      <% availableLeaves.forEach(function(leave){ %>
-      <tr>
-        <td></td>
-        <td><%= leave.Staff_name %></td> 
-        <td><%= leave.Department_name %></td>
-        <td><%= leave.reason %></td>
-        <td><%= leave.date_requested %></td>
-        <td><%= leave.start_date %></td>
-        <td><%= leave.end_date %></td>
-        <td><%= leave.status %></td>
+            <tbody>
+                <% availableLeaves.forEach(function(leave){ %>
+                <tr>
+                    <td></td>
+                    <td><%= leave.Staff_name %></td>
+                    <td><%= leave.Department_name %></td>
+                    <td><%= leave.reason %></td>
+                    <td><%= leave.date_requested %></td>
+                    <td><%= leave.start_date %></td>
+                    <td><%= leave.end_date %></td>
+                    <td><%= leave.status %></td>
 
-      <% }) %>
-    </tr>
-    </tbody>
-  </table><br/>
+                    <% }) %>
+                </tr>
+            </tbody>
+        </table><br />
+    </div>
 
+    <script>
+        function openNav() {
+            document.getElementById("mySidepanel").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px"
+        }
+
+        function closeNav() {
+            document.getElementById("mySidepanel").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
 </body>
 </html>
