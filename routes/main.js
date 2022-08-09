@@ -57,52 +57,6 @@ module.exports = function(app) {
         
     });
 
-    app.get("/allLeaves", function (req, res) {
-        if (req.session.username) {
-            let sqlquery = "SELECT Staff.Staff_name, Department.Department_name, Leave_Reason.reason, Leave_.date_requested, Leave_.start_date, Leave_.end_date, Leave_.status" +
-                            " FROM Leave_" +
-                            " JOIN Staff ON Leave_.Staff_id = Staff.Staff_id" +
-                            " JOIN Department ON Staff.Dept_id = Department.Dept_id" +
-                            " JOIN Leave_Reason ON Leave_.LR_id = Leave_Reason.LR_id" +
-                            " WHERE Staff_name = 'John Tan'";
-
-            db.query(sqlquery, (err, result) => {
-                if (err) res.redirect("/");
-                else {
-                    res.render("allLeaves.html", { availableLeaves: result });
-                }
-            });
-        }
-        else
-            res.redirect("/login");
-    });
-
-    app.get("/addLeave",function(req, res) {
-        if (req.session.username)
-            res.render("addLeave.html");
-        else
-            res.redirect("/login");
-    });
-
-    app.post("/addLeave", function (req, res) {
-        // leave_id (auto), Staff_id, LR_id, date_requested, start_date, end_date, status (pending by default)
-        let sqlquery = "INSERT INTO Leave_ (Staff_id, LR_id, date_requested, start_date, end_date, status)" +
-                        " VALUES (2,?,?,?,?,'Pending')";
-        let temprecord = [req.body.requestreason, req.body.requestdate, req.body.startdate, req.body.enddate]
-        // let newrecord = [req.body.name, req.body.department, req.body.requestdate, req.body.requestreason, req.body.startdate, req.body.enddate];
-
-        // execute sql query
-        db.query(sqlquery, temprecord, (err, result) => {
-            if (err) {
-            console.log(err);
-            res.redirect("/addLeave");
-            } 
-            else {
-            res.redirect("/allLeaves");
-            }
-        });
-    })
-
     // GET Register page
     app.get("/register", function (req, res) {
         if (req.session.username) { 
@@ -142,4 +96,55 @@ module.exports = function(app) {
             }
         });
     });
+
+    // GET allLeaves page
+    app.get("/allLeaves", function (req, res) {
+      if (req.session.username) {
+          let sqlquery = "SELECT Staff.Staff_name, Department.Department_name, Leave_Reason.reason, Leave_.date_requested, Leave_.start_date, Leave_.end_date, Leave_.status" +
+                          " FROM Leave_" +
+                          " JOIN Staff ON Leave_.Staff_id = Staff.Staff_id" +
+                          " JOIN Department ON Staff.Dept_id = Department.Dept_id" +
+                          " JOIN Leave_Reason ON Leave_.LR_id = Leave_Reason.LR_id" +
+                          " WHERE username = ?";
+
+          db.query(sqlquery, req.session.username, (err, result) => {
+              if (err) res.redirect("/");
+              else {
+                  res.render("allLeaves.html", { availableLeaves: result });
+              }
+          });
+      }
+      else
+          res.redirect("/login");
+  });
+
+  // GET addLeave page
+  app.get("/addLeave",function(req, res) {
+      if (req.session.username)
+          res.render("addLeave.html");
+      else
+          res.redirect("/login");
+  });
+
+  // POST addLeave page
+  app.post("/addLeave", function (req, res) {
+    
+      // set request date to today's date
+      const requestdate = new Date();
+
+      let sqlquery = "INSERT INTO Leave_ (Staff_id, LR_id, date_requested, start_date, end_date, status)" +
+                      " VALUES (?,?,?,?,?,'Pending')";
+      let temprecord = [session.roleid, req.body.requestreason, requestdate, req.body.startdate, req.body.enddate]
+
+      // execute sql query
+      db.query(sqlquery, temprecord, (err, result) => {
+          if (err) {
+          console.log(err);
+          res.redirect("/addLeave");
+          } 
+          else {
+          res.redirect("/allLeaves");
+          }
+      });
+  })
 }

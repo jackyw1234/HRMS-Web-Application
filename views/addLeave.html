@@ -2,48 +2,93 @@
 <html>
  
 <head>
-
-  <script>
-    // calculates how many days are between "startdate" and "enddate"
-    function calcDays() {
-      var start = new Date(document.getElementById("startdate").value);
-      var end = new Date(document.getElementById("enddate").value);
-
-      return parseInt((end - start) / (24 * 3600 * 1000));
+  <style>
+    body {
+        font-family: "Lato", sans-serif;
     }
-
-    function numofdays() {
-      if (document.getElementById("enddate")) {
-        document.getElementById("numdays2").value = calcDays();
-      }  
+    h1 {
+        text-align: center;
+        display: inline-block;
+        margin-left: 32%;
     }
-  </script>
+    .sidepanel {
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+    .sidepanel a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+    .sidepanel a:hover {
+        color: #f1f1f1;
+    }
+    .sidepanel .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+    }
+    .sidepanel .logout {
+        background-color: mediumspringgreen;
+        color: black;
+        position: absolute;
+        bottom: 60px;
+        width: 210px; 
+    }
+    .openbtn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+    }
+    .openbtn:hover {
+        background-color: #444;
+    }
+    #main {
+        transition: margin-left .5s;
+        padding: 16px;
+    }
+</style>
 
-  <title> Create a Leave Application </title>
+<title> Create a Leave Application </title>
 </head>
  
  <body>
+       <!--Side Panel div-->
+       <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="/">Home</a>
+        <a href="/allleaves">Leave</a>
+        <% if (session.roleid == 1 ){%>
+        <a href="/register">Register</a>
+        <%}%>
+        <a href="/logout" id="logout" class="logout">Logout</a>
+    </div>
 
-  <h1> Leave application </h1>
+    <!--Main content div-->
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰</button>
+        <h1> Create Leave application </h1>
+  
  
-  <form method="POST" action="/addLeave">
-    <!-- <label for="name">Name of Applicant: </label>
-    <input type="text" name="name" id="name"><br><br>
+  <form method="POST" action="/addLeave" style="text-align: center;">
+   
+    <p>Request Date: <span id="requestdate" name="requestdate"></span></p>
 
-    <label for="department"> Department: </label>
-    <select name="department" required>
-      <option value="" disabled selected>Select a Department</option>
-      <option value="Sales">Sales</option>
-      <option value="Marketing">Marketing</option>
-      <option value="Finance">Finance</option>
-      <option value="Operations">Operations</option>
-      <option value="Human Resource">Human Resource</option>
-      <option value="Purchase">Purchase</option>
-    </select><br><br> -->
-
-    <label for="requestdate">Date of Request: </label>
-    <input type="date" name="requestdate" id="requestdate"><br><br>
-    
     <label>Reason for request: </label>
     <input type="radio" id="requestreason" name="requestreason" value="1" required/>
     <label for="Annual Leave">Annual Leave</label>
@@ -60,7 +105,7 @@
     
     <div id="numdays">
       <label class="form">Expected no. of days:</label>
-      <input type="text" class="textbox" id="numdays2" name="numdays"/>
+      <input type="text" class="textbox" id="numdays2" name="numdays" readonly/>
     </div><br><br> 
 
 
@@ -70,5 +115,36 @@
     Available leaves to apply as of today: -
     
   </form>
+</div>
+
+  <script>
+    // get and display today's date in "dd/mm/yyyy" format
+    const today = new Date().toJSON().slice(0,10).split('-').reverse().join('/');
+    document.getElementById('requestdate').innerHTML = today;
+
+    // calculates how many days are between "startdate" and "enddate"
+    function calcDays() {
+      var start = new Date(document.getElementById("startdate").value);
+      var end = new Date(document.getElementById("enddate").value);
+
+      return parseInt((end - start) / (24 * 3600 * 1000));
+    }
+
+    function numofdays() {
+      if (document.getElementById("enddate")) {
+        document.getElementById("numdays2").value = calcDays();
+      }  
+    }
+
+    function openNav() {
+        document.getElementById("mySidepanel").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px"
+    }
+
+    function closeNav() {
+        document.getElementById("mySidepanel").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+</script>
  </body>
 </html>
