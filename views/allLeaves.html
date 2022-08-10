@@ -6,6 +6,8 @@
   <style>
     table {
       counter-reset: rowNumber;
+      border: 2px solid #000000;
+      margin-top: 10px;
     }
 
     table tr > td:first-child {
@@ -37,6 +39,10 @@
       color: white;
     }
 
+    #t1 tr {
+      background-color: white;
+    }
+
     h1 {
         text-align: center;
         display: inline-block;
@@ -44,7 +50,8 @@
     }
 
     body { 
-      font-family: Arial; 
+      font-family: "Lato", sans-serif;
+      background-color: #EEC9C9;   
     }
 
     .sidepanel {
@@ -131,22 +138,40 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Status</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
 
-
-
             <tbody>
-                <% availableLeaves.forEach(function(leave){ %>
+              <% availableLeaves.forEach(function(leave){ %>
                 <tr>
                     <td></td>
                     <td><%= leave.Staff_name %></td>
                     <td><%= leave.Department_name %></td>
                     <td><%= leave.reason %></td>
-                    <td><%= leave.date_requested %></td>
-                    <td><%= leave.start_date %></td>
-                    <td><%= leave.end_date %></td>
-                    <td><%= leave.status %></td>
+                    <td><%= (leave.date_requested).getDate(); %>/<%= (leave.date_requested).getMonth() + 1; %>/<%= (leave.date_requested).getFullYear(); %></td>
+                    <td><%= (leave.start_date).getDate(); %>/<%= (leave.start_date).getMonth() + 1; %>/<%= (leave.start_date).getFullYear(); %></td>
+                    <td><%= (leave.end_date).getDate(); %>/<%= (leave.end_date).getMonth() + 1 ;%>/<%= (leave.end_date).getFullYear(); %></td>
+                    
+                    <% if (leave.status == 'Approved' ){%>
+                      <td style="color: green;"><b><%= leave.status %></b></td>
+                    
+                    <% } else if (leave.status == 'Rejected' ){%>
+                      <td style="color: red;"><b><%= leave.status %></b></td>
+
+                    <% } else {%>
+                      <td style="color: orange;"><b><%= leave.status %></b></td>
+                    <%}%>
+
+                    <!-- <td><a href="/editLeave?id=<%= leave.Leave_id %>">
+                      <button class="button">edit</button>
+                    </a></td> -->
+                    
+                    <td><a href="/deleteLeave?id=<%= leave.Leave_id %>" 
+                      onclick="return confirm('Are you sure you want to delete?')">
+                      delete
+                    </a></td>
 
                     <% }) %>
                 </tr>
